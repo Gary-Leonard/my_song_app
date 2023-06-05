@@ -31,25 +31,26 @@ public class InMemoryArrayListDAO extends SongDAO {
             Song song = songs.get(i);
             if (song.getId() == id) return song;
         }
+        throw new SongNotFoundException(id);
         // could also use:
 //        for (Song song : songs) {
 //            if (song.getId() == id) return song;
 //        }
-        return null; // could be better to throw an exception
+        //return null; // could be better to throw an exception
     }
 
     @Override
     public void save(Song song) {
+        // maybe we want a custom exception for invalid properties?
         if (song.getId() <= 0) return; // don't save with invalid id
-        Song existingSong = readById(song.getId());
 
-        if (existingSong != null) { // update
+        try {
+            Song existingSong = readById(song.getId());
             existingSong.setArtist(song.getArtist());
             existingSong.setRuntime(song.getRuntime());
             existingSong.setTitle(song.getTitle());
             existingSong.setReleaseDate(song.getReleaseDate());
-        } else { // save new
-            // song doesn't exist, save a new one
+        } catch (SongNotFoundException e) {
             songs.add(song);
         }
     }
