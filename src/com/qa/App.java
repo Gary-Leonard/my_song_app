@@ -24,22 +24,9 @@ public class App {
                 LocalDate.of(1990, 6, 1)
         );
         Song[] data = new Song[] { song1, song2, song3 };
-        SongDAO dao = new InMemoryArrayListDAO(data);
-
-        for (Song song : dao.readAll()) {
-            System.out.println(song);
-        }
-        System.out.println("SONG WITH ID 2: ");
-        System.out.println(dao.readById(2));
-
-        System.out.println("Saving new song");
-        Song song4 = new Song(4, "Hells Bells", "ACDC", 300,
-                LocalDate.now());
-        dao.save(song4);
-
-        System.out.println("READ ALL SONGS:");
-        for (Song song : dao.readAll()) {
-            System.out.println(song);
-        }
+        SongApplication myApp = new SongApplication(
+                new InMemoryArrayListDAO(data)
+        );
+        myApp.run();
     }
 }
